@@ -1,0 +1,14 @@
+{
+  "hooks": {
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "\"$CLAUDE_PROJECT_DIR/.venv/Scripts/python\" -m pytest -q || (echo 'Quality gate: the test suite is failing. Fix the failing test(s) before finishing.' >&2; exit 2)"
+          }
+        ]
+      }
+    ]
+  }
+}

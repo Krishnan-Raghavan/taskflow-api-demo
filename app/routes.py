@@ -1,11 +1,4 @@
-"""HTTP routes for the TaskFlow API.
-
-NOTE FOR DEMO FACILITATOR:
-The POST /tasks endpoint below does not validate that "title" is present
-or non-empty. This is intentional -- it's the bug Claude Code will find
-and fix live during the demo. See tests/test_tasks.py::test_create_task_rejects_empty_title
-for the failing test that exposes it.
-"""
+"""HTTP routes for the TaskFlow API."""
 from flask import Blueprint, jsonify, request
 
 from app.models import store
@@ -17,7 +10,8 @@ bp = Blueprint("tasks", __name__)
 def create_task():
     data = request.get_json(silent=True) or {}
     title = data.get("title", "")
-    # BUG: no validation here -- empty/missing titles are silently accepted.
+    if not isinstance(title, str) or not title.strip():
+        return jsonify({"error": "title is required"}), 400
     task = store.create(title=title)
     return jsonify(vars(task)), 201
 
